@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import SignButton from '@/components/blocks/SignButton';
 import InspirationQuote from '@/components/blocks/InspirationQuote';
 import HorizontalImageScroll from '@/components/blocks/HorizontalImageScroll';
+import TempleLoader from '@/components/blocks/TempleLoader';
 import { getDayNumber } from '@/lib/utils';
 import { DIMENSIONS } from '@/lib/constants';
 import gsap from 'gsap';
@@ -23,6 +24,7 @@ export default function DashboardPage() {
   const [currentDay, setCurrentDay] = useState(0);
   const [dimension, setDimension] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
   
   const mainContentRef = useRef<HTMLDivElement>(null);
   const dayNumberRef = useRef<HTMLParagraphElement>(null);
@@ -33,7 +35,7 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    if (!loading && mainContentRef.current) {
+    if (!loading && !showLoader && mainContentRef.current) {
       // Animar el número del día
       if (dayNumberRef.current) {
         gsap.fromTo(
@@ -52,7 +54,7 @@ export default function DashboardPage() {
         );
       }
     }
-  }, [loading]);
+  }, [loading, showLoader]);
 
   const loadData = async () => {
     const supabase = createClient();
@@ -96,6 +98,10 @@ export default function DashboardPage() {
     setLoading(false);
   };
 
+  const handleLoaderComplete = () => {
+    setShowLoader(false);
+  };
+
   const handleSign = async () => {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -124,31 +130,35 @@ export default function DashboardPage() {
   const dayString = currentDay.toString().padStart(2, '0');
 
   return (
-    <div ref={mainContentRef} className="space-y-12">
-      <div className="text-center space-y-2">
-        <p
-          ref={dayNumberRef}
-          className="font-satoshi text-display font-bold tracking-tight"
-        >
-          {dayString}
-        </p>
-        <p className="font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary">
-          {dimension?.name}
-        </p>
-      </div>
-
-      <div ref={signButtonRef}>
-        <SignButton
-          isSigned={todayEntry?.type === 'firma'}
-          isFailed={todayEntry?.type === 'fallo'}
-          onSign={handleSign}
-          onFail={handleFail}
-        />
-      </div>
-
-      <InspirationQuote />
+    <>
+      {showLoader && <TempleLoader onComplete={handleLoaderComplete} />}
       
-      <HorizontalImageScroll />
-    </div>
+      <div ref={mainContentRef} className={`space-y-12 ${showLoader ? 'opacity-0' : 'opacity-100'} transition-opacity duration-500`}>
+        <div className="text-center space-y-2">
+          <p
+            ref={dayNumberRef}
+            className="font-satoshi text-display font-bold tracking-tight"
+          >
+            {dayString}
+          </p>
+          <p className="font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary">
+            {dimension?.name}
+          </p>
+        </div>
+
+        <div ref={signButtonRef}>
+          <SignButton
+            isSigned={todayEntry?.type === 'firma'}
+            isFailed={todayEntry?.type === 'fallo'}
+            onSign={handleSign}
+            onFail={handleFail}
+          />
+        </div>
+
+        <InspirationQuote />
+        
+        <HorizontalImageScroll />
+      </div>
+    </>
   );
 }
