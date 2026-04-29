@@ -22,31 +22,21 @@ export default function LoginPage() {
     console.log('Bypass mode:', isDevBypass, 'Value:', process.env.NEXT_PUBLIC_DEV_BYPASS);
 
     if (isDevBypass) {
-      console.log('Using bypass mode');
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password: 'dev-bypass', // Contraseña dummy para bypass
+      console.log('Using bypass mode - logging in as dev user');
+      // Usar un usuario de desarrollo pre-creado para evitar rate limit
+      const devEmail = process.env.NEXT_PUBLIC_DEV_EMAIL || 'dev@temple.app';
+      const devPassword = process.env.NEXT_PUBLIC_DEV_PASSWORD || 'temple-dev-123';
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: devEmail,
+        password: devPassword,
       });
 
       if (error) {
-        console.log('User not found, creating...');
-        // Si el usuario no existe, crearlo
-        const { error: signUpError } = await supabase.auth.signUp({
-          email,
-          password: 'dev-bypass',
-        });
-
-        if (signUpError) {
-          console.error('Supabase error:', signUpError);
-          setMessage(`Error: ${signUpError.message}`);
-        } else {
-          setMessage('Login dev bypass exitoso. Redirigiendo...');
-          setTimeout(() => {
-            window.location.href = '/dashboard';
-          }, 1000);
-        }
+        console.error('Dev login error:', error);
+        setMessage(`Error: Usuario dev no configurado. Crea el usuario ${devEmail} en Supabase con contraseña ${devPassword}`);
       } else {
-        setMessage('Login dev bypass exitoso. Redirigiendo...');
+        setMessage('Login dev exitoso. Redirigiendo...');
         setTimeout(() => {
           window.location.href = '/dashboard';
         }, 1000);
