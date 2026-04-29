@@ -1,9 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import PageHeader from '@/components/layout/PageHeader';
 import SignButton from '@/components/blocks/SignButton';
-import { getActiveBlock, getTodayEntry, getEntriesByBlock } from '@/lib/supabase/queries';
+import { getActiveBlock, getTodayEntry } from '@/lib/supabase/queries';
 import { getDayNumber } from '@/lib/utils';
+import { DIMENSIONS } from '@/lib/constants';
 
 // Forzar renderizado dinámico
 export const dynamic = 'force-dynamic';
@@ -24,45 +24,33 @@ export default async function DashboardPage() {
 
   const currentDay = getDayNumber(activeBlock.started_at);
   const todayEntry = await getTodayEntry(activeBlock.id, currentDay);
-  const entries = await getEntriesByBlock(activeBlock.id);
+  const dimension = DIMENSIONS.find(d => d.id === activeBlock.dimension);
 
-  const signedCount = entries.filter((e) => e.type === 'firma').length;
-  const failedCount = entries.filter((e) => e.type === 'fallo').length;
+  const dayString = currentDay.toString().padStart(2, '0');
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-8">
-      <PageHeader
-        title={`Día ${currentDay} de 27`}
-        subtitle={`${activeBlock.dimension.toUpperCase()}`}
-      />
-
-      <div className="mt-8 space-y-8">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="border border-light-border dark:border-dark-border rounded-lg p-4">
-            <p className="text-label mb-1">Firmas</p>
-            <p className="text-display">{signedCount}</p>
-          </div>
-          <div className="border border-light-border dark:border-dark-border rounded-lg p-4">
-            <p className="text-label mb-1">Fallos</p>
-            <p className="text-display">{failedCount}</p>
-          </div>
-        </div>
-
-        <div className="border border-light-border dark:border-dark-border rounded-lg p-8">
-          <SignButton
-            isSigned={todayEntry?.type === 'firma'}
-            isFailed={todayEntry?.type === 'fallo'}
-            onSign={async () => {
-              'use server';
-              // Server action implementation
-            }}
-            onFail={async () => {
-              'use server';
-              // Server action implementation
-            }}
-          />
-        </div>
+    <div className="space-y-12">
+      <div className="text-center space-y-2">
+        <p className="font-satoshi text-display font-bold tracking-tight">
+          {dayString}
+        </p>
+        <p className="font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary">
+          {dimension?.name}
+        </p>
       </div>
-    </main>
+
+      <SignButton
+        isSigned={todayEntry?.type === 'firma'}
+        isFailed={todayEntry?.type === 'fallo'}
+        onSign={async () => {
+          'use server';
+          // Server action implementation
+        }}
+        onFail={async () => {
+          'use server';
+          // Server action implementation
+        }}
+      />
+    </div>
   );
 }

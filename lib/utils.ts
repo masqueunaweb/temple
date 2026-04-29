@@ -6,7 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getFailLevel(failReason: string, entries: Entry[]): FailLevel {
+export function getFailLevel(
+  failReason: string,
+  entries: { type: string; fail_reason: string | null }[]
+): FailLevel {
   const sameReasonCount = entries.filter(
     (e) => e.type === 'fallo' && e.fail_reason === failReason
   ).length;
@@ -15,6 +18,22 @@ export function getFailLevel(failReason: string, entries: Entry[]): FailLevel {
   if (sameReasonCount === 1) return 'patron';
   return 'desliz';
 }
+
+export const FAIL_LEVEL_COPY = {
+  desliz: {
+    title: 'Registrado.',
+    subtitle: 'El Bloque continúa.',
+  },
+  patron: {
+    title: 'Este motivo ya apareció antes.',
+    subtitle: 'Tómate un momento antes de continuar.',
+  },
+  punto_ciego: {
+    title: 'Tres veces el mismo motivo.',
+    subtitle: '¿Qué vas a cambiar?',
+    placeholder: 'Escribe algo concreto. No retórico.',
+  },
+} as const;
 
 export function getDayNumber(startedAt: string): number {
   const start = new Date(startedAt);

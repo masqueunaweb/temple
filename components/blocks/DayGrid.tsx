@@ -4,29 +4,38 @@ import { cn } from '@/lib/utils';
 interface DayGridProps {
   days: DayStatus[];
   onDayClick?: (dayNumber: number) => void;
+  currentDay?: number;
 }
 
-export default function DayGrid({ days, onDayClick }: DayGridProps) {
+export default function DayGrid({ days, onDayClick, currentDay }: DayGridProps) {
   return (
     <div className="grid grid-cols-9 gap-2">
-      {days.map((day) => (
-        <button
-          key={day.dayNumber}
-          onClick={() => onDayClick?.(day.dayNumber)}
-          className={cn(
-            'aspect-square rounded-lg border transition-all duration-150',
-            'flex items-center justify-center text-label',
-            {
-              'bg-accent text-white border-accent': day.status === 'firma',
-              'bg-transparent border-light-border dark:border-dark-border text-light-text dark:text-dark-text':
-                day.status === 'pending',
-              'bg-transparent border-red-500 text-red-500': day.status === 'fallo',
-            }
-          )}
-        >
-          {day.status === 'fallo' ? '✕' : day.dayNumber}
-        </button>
-      ))}
+      {days.map((day) => {
+        const isCurrentDay = currentDay === day.dayNumber;
+        const isPending = day.status === 'pending';
+
+        return (
+          <button
+            key={day.dayNumber}
+            onClick={() => onDayClick?.(day.dayNumber)}
+            className={cn(
+              'w-9 h-9 rounded-full flex items-center justify-center transition-all duration-150',
+              'font-satoshi text-body font-mono',
+              {
+                'bg-temple-text-primary text-temple-bg hover:bg-temple-accent hover:text-temple-accent-text':
+                  day.status === 'firma',
+                'border border-temple-border text-temple-text-secondary hover:text-temple-text-primary':
+                  day.status === 'pending' && !isCurrentDay,
+                'border border-temple-error text-temple-error':
+                  day.status === 'fallo',
+              },
+              isCurrentDay && isPending && 'border-temple-accent animate-pulse'
+            )}
+          >
+            {day.status === 'fallo' ? '✕' : day.dayNumber}
+          </button>
+        );
+      })}
     </div>
   );
 }

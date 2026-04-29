@@ -1,11 +1,13 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/utils';
 
-interface NavProps {
-  currentPath?: string;
-}
+export default function Nav() {
+  const pathname = usePathname();
 
-export default function Nav({ currentPath = '/' }: NavProps) {
   const links = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/bloque/nuevo', label: 'Nuevo Bloque' },
@@ -13,27 +15,33 @@ export default function Nav({ currentPath = '/' }: NavProps) {
   ];
 
   return (
-    <nav className="border-b border-light-border dark:border-dark-border">
-      <div className="max-w-3xl mx-auto px-4 py-4">
+    <nav className="border-b border-temple-border">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-display font-light">
+          <Link
+            href="/dashboard"
+            className="font-satoshi text-display font-bold tracking-tight"
+          >
             TEMPLE
           </Link>
-          <div className="flex gap-6">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'text-label transition-colors duration-150',
-                  currentPath === link.href
-                    ? 'text-accent'
-                    : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text dark:hover:text-dark-text'
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="flex items-center gap-6">
+            <div className="flex gap-6">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'font-satoshi text-label font-semibold tracking-wider uppercase transition-colors',
+                    pathname === link.href
+                      ? 'text-temple-accent'
+                      : 'text-temple-text-secondary hover:text-temple-text-primary'
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </div>

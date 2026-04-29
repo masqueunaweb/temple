@@ -1,41 +1,71 @@
-import { Dimension } from '@/lib/types';
-import PageHeader from '@/components/layout/PageHeader';
-import Button from '@/components/ui/Button';
+'use client';
 
-const DIMENSIONS: Array<{ id: Dimension; number: string; name: string; description: string }> = [
-  { id: 'interior', number: '01', name: 'INTERIOR', description: 'Trabajo mental y espiritual' },
-  { id: 'maquina', number: '02', name: 'MÁQUINA', description: 'Salud y rendimiento físico' },
-  { id: 'trinchera', number: '03', name: 'TRINCHERA', description: 'Finanzas y recursos' },
-  { id: 'afilado', number: '04', name: 'AFILADO', description: 'Habilidades y aprendizaje' },
-  { id: 'tribu', number: '05', name: 'TRIBU', description: 'Relaciones y comunidad' },
-];
+import { useState } from 'react';
+import { DIMENSIONS } from '@/lib/constants';
+import { Dimension } from '@/lib/types';
+import DimensionCard from '@/components/blocks/DimensionCard';
 
 export const dynamic = 'force-dynamic';
 
 export default function NewBlockPage() {
-  return (
-    <main className="max-w-3xl mx-auto px-4 py-8">
-      <PageHeader
-        title="Nuevo Bloque"
-        subtitle="Elige una dimensión para empezar"
-      />
+  const [selectedDimension, setSelectedDimension] = useState<Dimension | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-      <div className="mt-8 space-y-4">
-        {DIMENSIONS.map((dimension) => (
-          <button
+  const handleSelect = (dimension: Dimension) => {
+    setSelectedDimension(dimension);
+    setShowConfirm(true);
+  };
+
+  const handleConfirm = () => {
+    // TODO: Implementar creación de bloque en Supabase
+    console.log('Creating block for dimension:', selectedDimension);
+    setShowConfirm(false);
+  };
+
+  const handleCancel = () => {
+    setShowConfirm(false);
+    setSelectedDimension(null);
+  };
+
+  return (
+    <>
+      <div className="space-y-4">
+        {DIMENSIONS.map((dimension, index) => (
+          <DimensionCard
             key={dimension.id}
-            className="w-full border border-light-border dark:border-dark-border rounded-lg p-6 text-left hover:border-accent transition-colors duration-150"
-          >
-            <div className="text-label text-light-text-secondary dark:text-dark-text-secondary mb-2">
-              {dimension.number}
-            </div>
-            <h3 className="text-display mb-2">{dimension.name}</h3>
-            <p className="text-body text-light-text-secondary dark:text-dark-text-secondary">
-              {dimension.description}
-            </p>
-          </button>
+            dimension={dimension}
+            index={index}
+            onSelect={handleSelect}
+          />
         ))}
       </div>
-    </main>
+
+      {showConfirm && (
+        <div className="fixed inset-0 bg-temple-bg/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-temple-surface border border-temple-border rounded-md p-8 max-w-md w-full">
+            <h2 className="font-satoshi text-heading font-bold tracking-tight mb-4">
+              Confirmar Bloque
+            </h2>
+            <p className="font-satoshi text-body text-temple-text-secondary mb-8">
+              Empiezas hoy. 27 días. Sin vuelta atrás.
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={handleCancel}
+                className="flex-1 py-3 font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary hover:text-temple-text-primary transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="flex-1 py-3 font-satoshi text-label font-semibold tracking-wider uppercase bg-temple-text-primary text-temple-bg hover:bg-temple-accent hover:text-temple-accent-text rounded-md transition-colors"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

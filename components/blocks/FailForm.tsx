@@ -1,11 +1,11 @@
+'use client';
+
 import { useState } from 'react';
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
+import { FAIL_LEVEL_COPY, getFailLevel } from '@/lib/utils';
 import { FailLevel } from '@/lib/types';
-import { getFailLevel } from '@/lib/utils';
 
 interface FailFormProps {
-  entries: any[];
+  entries: { type: string; fail_reason: string | null }[];
   onSubmit: (reason: string, note?: string) => void;
   onCancel: () => void;
   isLoading?: boolean;
@@ -21,19 +21,18 @@ export default function FailForm({
   const [note, setNote] = useState('');
   const [reflection, setReflection] = useState('');
 
-  const failLevel = reason ? getFailLevel(reason, entries) : 'desliz';
+  const failLevel: FailLevel = reason ? getFailLevel(reason, entries) : 'desliz';
+  const copy = FAIL_LEVEL_COPY[failLevel];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!reason.trim()) return;
 
     if (failLevel === 'punto_ciego' && !reflection.trim()) {
-      alert('Debes escribir qué vas a cambiar');
       return;
     }
 
     if (failLevel === 'patron' && !note.trim()) {
-      alert('Debes escribir una reflexión');
       return;
     }
 
@@ -46,24 +45,30 @@ export default function FailForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-label mb-2">Motivo del fallo</label>
-        <Input
+        <label className="block font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary mb-2">
+          Motivo del fallo
+        </label>
+        <input
+          type="text"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           placeholder="Ej: Falta de tiempo, cansancio..."
+          className="w-full bg-transparent border-b border-temple-border py-2 font-satoshi text-body text-temple-text-primary placeholder-temple-text-tertiary focus:outline-none focus:border-temple-accent transition-colors"
           required
         />
       </div>
 
       {failLevel === 'patron' && (
         <div>
-          <label className="block text-label mb-2">
-            Reflexión (obligatorio - patrón detectado)
+          <label className="block font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary mb-2">
+            Reflexión
           </label>
-          <Input
+          <input
+            type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="¿Qué patrón ves en este fallo?"
+            className="w-full bg-transparent border-b border-temple-border py-2 font-satoshi text-body text-temple-text-primary placeholder-temple-text-tertiary focus:outline-none focus:border-temple-accent transition-colors"
             required
           />
         </div>
@@ -71,13 +76,15 @@ export default function FailForm({
 
       {failLevel === 'punto_ciego' && (
         <div>
-          <label className="block text-label mb-2">
-            ¿Qué vas a cambiar? (obligatorio - punto ciego)
+          <label className="block font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary mb-2">
+            ¿Qué vas a cambiar?
           </label>
-          <Input
+          <input
+            type="text"
             value={reflection}
             onChange={(e) => setReflection(e.target.value)}
-            placeholder="Acción concreta para evitar repetir"
+            placeholder="Escribe algo concreto. No retórico."
+            className="w-full bg-transparent border-b border-temple-border py-2 font-satoshi text-body text-temple-text-primary placeholder-temple-text-tertiary focus:outline-none focus:border-temple-accent transition-colors"
             required
           />
         </div>
@@ -85,28 +92,35 @@ export default function FailForm({
 
       {failLevel === 'desliz' && (
         <div>
-          <label className="block text-label mb-2">Nota opcional</label>
-          <Input
+          <label className="block font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary mb-2">
+            Nota opcional
+          </label>
+          <input
+            type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="Reflexión breve..."
+            className="w-full bg-transparent border-b border-temple-border py-2 font-satoshi text-body text-temple-text-primary placeholder-temple-text-tertiary focus:outline-none focus:border-temple-accent transition-colors"
           />
         </div>
       )}
 
       <div className="flex gap-4">
-        <Button
+        <button
           type="button"
           onClick={onCancel}
-          variant="secondary"
-          className="flex-1"
           disabled={isLoading}
+          className="flex-1 py-3 font-satoshi text-label font-semibold tracking-wider uppercase text-temple-text-secondary hover:text-temple-text-primary transition-colors disabled:opacity-50"
         >
           Cancelar
-        </Button>
-        <Button type="submit" className="flex-1" disabled={isLoading}>
-          Registrar fallo
-        </Button>
+        </button>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="flex-1 py-3 font-satoshi text-label font-semibold tracking-wider uppercase bg-temple-text-primary text-temple-bg hover:bg-temple-accent hover:text-temple-accent-text rounded-md transition-colors disabled:opacity-50"
+        >
+          Registrar
+        </button>
       </div>
     </form>
   );

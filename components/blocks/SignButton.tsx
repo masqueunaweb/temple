@@ -1,5 +1,3 @@
-import Button from '@/components/ui/Button';
-
 interface SignButtonProps {
   isSigned: boolean;
   isFailed: boolean;
@@ -17,10 +15,12 @@ export default function SignButton({
 }: SignButtonProps) {
   if (isSigned) {
     return (
-      <div className="text-center">
-        <div className="text-display mb-2">✓</div>
-        <p className="text-body text-light-text-secondary dark:text-dark-text-secondary">
-          Firma completada
+      <div className="text-center space-y-2">
+        <p className="font-satoshi text-display font-bold tracking-tight">
+          Firmado.
+        </p>
+        <p className="font-satoshi text-body text-temple-text-secondary">
+          Hasta mañana.
         </p>
       </div>
     );
@@ -28,10 +28,12 @@ export default function SignButton({
 
   if (isFailed) {
     return (
-      <div className="text-center">
-        <div className="text-display mb-2">✕</div>
-        <p className="text-body text-light-text-secondary dark:text-dark-text-secondary">
-          Fallo registrado
+      <div className="text-center space-y-2">
+        <p className="font-satoshi text-display font-bold tracking-tight text-temple-error">
+          Fallo.
+        </p>
+        <p className="font-satoshi text-body text-temple-text-secondary">
+          Mañana es otro día.
         </p>
       </div>
     );
@@ -39,21 +41,20 @@ export default function SignButton({
 
   return (
     <div className="space-y-4">
-      <Button
+      <button
         onClick={onSign}
         disabled={isLoading}
-        className="w-full py-6 text-lg"
+        className="w-full h-14 sm:h-12 font-satoshi text-label font-semibold tracking-wider uppercase bg-temple-text-primary text-temple-bg hover:bg-temple-accent hover:text-temple-accent-text rounded-md transition-colors duration-150 disabled:opacity-50"
       >
-        Firmar hoy
-      </Button>
-      <Button
+        FIRMA
+      </button>
+      <button
         onClick={onFail}
         disabled={isLoading}
-        variant="ghost"
-        className="w-full py-3 text-sm"
+        className="w-full font-satoshi text-body text-temple-text-secondary hover:text-temple-text-primary transition-colors disabled:opacity-50"
       >
-        Registrar fallo
-      </Button>
+        FALLO
+      </button>
     </div>
   );
 }

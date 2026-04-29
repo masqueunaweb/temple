@@ -9,30 +9,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        light: {
-          bg: '#FAFAFA',
-          text: '#0A0A0A',
-          textSecondary: '#6B6B6B',
-          border: '#E5E5E5',
+        temple: {
+          accent: 'var(--temple-accent)',
+          accentText: 'var(--temple-accent-text)',
+          bg: 'var(--temple-bg)',
+          bgElevated: 'var(--temple-bg-elevated)',
+          surface: 'var(--temple-surface)',
+          surfaceHover: 'var(--temple-surface-hover)',
+          border: 'var(--temple-border)',
+          borderSubtle: 'var(--temple-border-subtle)',
+          textPrimary: 'var(--temple-text-primary)',
+          textSecondary: 'var(--temple-text-secondary)',
+          textTertiary: 'var(--temple-text-tertiary)',
+          success: 'var(--temple-success)',
+          error: 'var(--temple-error)',
+          warning: 'var(--temple-warning)',
         },
-        dark: {
-          bg: '#0A0A0A',
-          text: '#F5F5F5',
-          textSecondary: '#6B6B6B',
-          border: '#1F1F1F',
-        },
-        accent: '#0A0A0A',
       },
       fontFamily: {
-        inter: ['var(--font-inter)'],
+        satoshi: ['var(--font-satoshi)', 'sans-serif'],
+        jetbrains: ['var(--font-jetbrains-mono)', 'monospace'],
       },
       borderRadius: {
-        DEFAULT: '8px',
-        lg: '12px',
+        sm: 'var(--temple-radius-sm)',
+        md: 'var(--temple-radius-md)',
+        lg: 'var(--temple-radius-lg)',
       },
       transitionDuration: {
-        '150': '150ms',
-        '300': '300ms',
+        DEFAULT: 'var(--temple-duration)',
+      },
+      transitionTimingFunction: {
+        DEFAULT: 'var(--temple-ease)',
       },
     },
   },
