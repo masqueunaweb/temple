@@ -7,11 +7,9 @@
   --font-satoshi: 'Satoshi', sans-serif;
   --font-jetbrains-mono: 'JetBrains Mono', monospace;
 
-  /* Acento — nunca cambia entre modos */
+  /* Dark mode (defecto) */
   --temple-accent: #D9FF06;
   --temple-accent-text: #0A0A0A;
-
-  /* Dark mode (defecto) */
   --temple-bg: #0A0A0A;
   --temple-bg-elevated: #111111;
   --temple-surface: #1A1A1A;
@@ -38,6 +36,9 @@
 }
 
 [data-theme="light"] {
+  /* Acento azul eléctrico mediterráneo para light mode */
+  --temple-accent: #00D4FF;
+  --temple-accent-text: #0A0A0A;
   --temple-bg: #F8F8F5;
   --temple-bg-elevated: #F2F2EE;
   --temple-surface: #EFEFEB;

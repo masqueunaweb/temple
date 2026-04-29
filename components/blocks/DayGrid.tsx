@@ -1,3 +1,6 @@
+'use client';
+
+import { motion } from 'framer-motion';
 import { DayStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
@@ -10,13 +13,16 @@ interface DayGridProps {
 export default function DayGrid({ days, onDayClick, currentDay }: DayGridProps) {
   return (
     <div className="grid grid-cols-9 gap-2">
-      {days.map((day) => {
+      {days.map((day, index) => {
         const isCurrentDay = currentDay === day.dayNumber;
         const isPending = day.status === 'pending';
 
         return (
-          <button
+          <motion.button
             key={day.dayNumber}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2, delay: index * 0.01 }}
             onClick={() => onDayClick?.(day.dayNumber)}
             className={cn(
               'w-9 h-9 rounded-full flex items-center justify-center transition-all duration-150',
@@ -31,9 +37,11 @@ export default function DayGrid({ days, onDayClick, currentDay }: DayGridProps) 
               },
               isCurrentDay && isPending && 'border-temple-accent animate-pulse'
             )}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
           >
             {day.status === 'fallo' ? '✕' : day.dayNumber}
-          </button>
+          </motion.button>
         );
       })}
     </div>

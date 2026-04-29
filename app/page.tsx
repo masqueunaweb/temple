@@ -27,7 +27,7 @@ export default function HomePage() {
 
       if (response.ok) {
         setStatus('success');
-        setMessage('¡Te has unido a la lista de espera!');
+        setMessage('Te has unido a la lista de espera.');
         setEmail('');
       } else {
         setStatus('error');
@@ -40,11 +40,21 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-light-bg dark:bg-dark-bg px-4 relative">
-      {/* Botón discreto de login admin */}
+    <main className="min-h-screen flex flex-col items-center justify-center bg-temple-bg px-4 relative overflow-hidden">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 z-0 opacity-20"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1920&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+
+      {/* Botón discreto de login */}
       <Link
         href="/login"
-        className="absolute top-4 right-4 p-2 hover:opacity-70 transition-opacity"
+        className="absolute top-4 right-4 p-2 hover:opacity-70 transition-opacity z-20"
         aria-label="Login"
       >
         <svg
@@ -63,15 +73,17 @@ export default function HomePage() {
       </Link>
 
       {/* Lista de espera */}
-      <div className="text-center max-w-md w-full">
-        <h1 className="text-display text-6xl font-bold mb-4">TEMPLE</h1>
-        <p className="text-body text-xl text-light-text-secondary dark:text-dark-text-secondary mb-8">
+      <div className="text-center max-w-md w-full relative z-10">
+        <h1 className="font-satoshi text-display font-bold tracking-tight mb-4">
+          TEMPLE
+        </h1>
+        <p className="font-satoshi text-body text-temple-text-secondary mb-8">
           27 días. Constancia silenciosa.
         </p>
 
         <div className="space-y-4">
-          <p className="text-body text-light-text-secondary dark:text-dark-text-secondary">
-            Únete a la lista de espera y sé el primero en acceder.
+          <p className="font-satoshi text-body text-temple-text-secondary">
+            Únete a la lista de espera.
           </p>
 
           <form className="flex gap-2" onSubmit={handleSubmit}>
@@ -81,7 +93,7 @@ export default function HomePage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={status === 'loading'}
-              className="flex-1 px-4 py-3 border border-light-border dark:border-dark-border rounded-lg bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text placeholder-light-text-secondary dark:placeholder-dark-text-secondary focus:outline-none focus:border-accent transition-colors duration-150 disabled:opacity-50"
+              className="flex-1 px-4 py-3 border border-temple-border rounded-md bg-temple-surface text-temple-text-primary placeholder-temple-text-tertiary focus:outline-none focus:border-temple-accent transition-colors duration-150 disabled:opacity-50"
             />
             <Button variant="primary" disabled={status === 'loading'}>
               {status === 'loading' ? '...' : 'Unirse'}
@@ -89,12 +101,12 @@ export default function HomePage() {
           </form>
 
           {message && (
-            <p className={`text-label ${status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`font-satoshi text-label ${status === 'success' ? 'text-temple-success' : 'text-temple-error'}`}>
               {message}
             </p>
           )}
 
-          <p className="text-label text-light-text-secondary dark:text-dark-text-secondary">
+          <p className="font-satoshi text-label text-temple-text-tertiary">
             Sin spam. Solo actualizaciones importantes.
           </p>
         </div>
