@@ -18,7 +18,8 @@ export default function LoginPage() {
     const supabase = createClient();
 
     // Dev bypass: si está habilitado, permite login directo sin magic link
-    if (process.env.NEXT_PUBLIC_DEV_BYPASS === 'true') {
+    const isDevBypass = process.env.NEXT_PUBLIC_DEV_BYPASS === 'true' || process.env.NEXT_PUBLIC_DEV_BYPASS === '1';
+    if (isDevBypass) {
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password: 'dev-bypass', // Contraseña dummy para bypass
@@ -77,9 +78,9 @@ export default function LoginPage() {
           <p className="text-body text-light-text-secondary dark:text-dark-text-secondary mb-8">
             27 días. Constancia silenciosa.
           </p>
-          {process.env.NEXT_PUBLIC_DEV_BYPASS === 'true' && (
-            <p className="text-xs text-amber-500 mb-4">🛠️ DEV BYPASS ACTIVO</p>
-          )}
+          <p className="text-xs text-amber-500 mb-4">
+            🛠️ BYPASS: {process.env.NEXT_PUBLIC_DEV_BYPASS || 'NO CONFIGURADO'}
+          </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
