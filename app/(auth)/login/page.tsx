@@ -77,6 +77,9 @@ export default function LoginPage() {
           <p className="text-body text-light-text-secondary dark:text-dark-text-secondary mb-8">
             27 días. Constancia silenciosa.
           </p>
+          {process.env.NEXT_PUBLIC_DEV_BYPASS === 'true' && (
+            <p className="text-xs text-amber-500 mb-4">🛠️ DEV BYPASS ACTIVO</p>
+          )}
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
