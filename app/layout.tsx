@@ -2,11 +2,13 @@ import type { Metadata, Viewport } from 'next';
 import { JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
+import LenisProvider from '@/components/providers/LenisProvider';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains-mono',
   display: 'swap',
+  weight: ['400', '500'],
 });
 
 export const metadata: Metadata = {

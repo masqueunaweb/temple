@@ -7,6 +7,7 @@ import SignButton from '@/components/blocks/SignButton';
 import InspirationQuote from '@/components/blocks/InspirationQuote';
 import HorizontalImageScroll from '@/components/blocks/HorizontalImageScroll';
 import TempleLoader from '@/components/blocks/TempleLoader';
+import AppleDot from '@/components/blocks/AppleDot';
 import { getDayNumber } from '@/lib/utils';
 import { DIMENSIONS } from '@/lib/constants';
 import gsap from 'gsap';
@@ -128,6 +129,7 @@ export default function DashboardPage() {
   }
 
   const dayString = currentDay.toString().padStart(2, '0');
+  const daysRemaining = 27 - currentDay;
 
   return (
     <>
@@ -153,6 +155,10 @@ export default function DashboardPage() {
             onSign={handleSign}
             onFail={handleFail}
           />
+        </div>
+
+        <div className="flex justify-center">
+          <AppleDot daysRemaining={daysRemaining} />
         </div>
 
         <InspirationQuote />
