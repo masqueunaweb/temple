@@ -16,18 +16,54 @@ export default function LoginPage() {
     setMessage('');
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
 
-    if (error) {
-      console.error('Supabase error:', error);
-      setMessage(`Error: ${error.message}`);
+    // Dev bypass: si está habilitado, permite login directo sin magic link
+    if (process.env.NEXT_PUBLIC_DEV_BYPASS === 'true') {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password: 'dev-bypass', // Contraseña dummy para bypass
+      });
+
+      if (error) {
+        // Si el usuario no existe, crearlo
+        const { error: signUpError } = await supabase.auth.signUp({
+          email,
+          password: 'dev-bypass',
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+
+        if (signUpError) {
+          console.error('Supabase error:', signUpError);
+          setMessage(`Error: ${signUpError.message}`);
+        } else {
+          setMessage('Login dev bypass exitoso. Redirigiendo...');
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 1000);
+        }
+      } else {
+        setMessage('Login dev bypass exitoso. Redirigiendo...');
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 1000);
+      }
     } else {
-      setMessage('Magic link enviado a tu email. Revisa tu bandeja de entrada.');
+      // Normal magic flow
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        setMessage(`Error: ${error.message}`);
+      } else {
+        setMessage('Magic link enviado a tu email. Revisa tu bandeja de entrada.');
+      }
     }
 
     setLoading(false);
