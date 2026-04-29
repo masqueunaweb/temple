@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
   try {
     const { email } = await request.json();
@@ -13,6 +11,17 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Check if Resend is configured
+    if (!process.env.RESEND_API_KEY) {
+      console.warn('RESEND_API_KEY not configured, skipping email sending');
+      return NextResponse.json(
+        { message: 'Suscripción registrada (email deshabilitado)' },
+        { status: 200 }
+      );
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Agregar contacto a la audiencia de Resend
     const { data, error } = await resend.contacts.create({
