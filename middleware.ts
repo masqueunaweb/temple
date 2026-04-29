@@ -31,14 +31,6 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  // Handle Supabase auth code from magic link
-  const code = request.nextUrl.searchParams.get('code');
-  if (code) {
-    await supabase.auth.exchangeCodeForSession(code);
-    // Redirect to dashboard without the code parameter
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-
   const {
     data: { user },
   } = await supabase.auth.getUser();

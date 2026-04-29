@@ -19,12 +19,13 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
     if (error) {
-      setMessage('Error al enviar el magic link. Intenta de nuevo.');
+      console.error('Supabase error:', error);
+      setMessage(`Error: ${error.message}`);
     } else {
       setMessage('Magic link enviado a tu email. Revisa tu bandeja de entrada.');
     }
