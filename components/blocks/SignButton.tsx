@@ -44,9 +44,9 @@ export default function SignButton({
       <button
         onClick={onSign}
         disabled={isLoading}
-        className="w-full h-14 sm:h-12 font-satoshi text-label font-semibold tracking-wider uppercase bg-temple-text-primary text-temple-bg hover:bg-temple-accent hover:text-temple-accent-text rounded-md transition-colors duration-150 disabled:opacity-50"
+        className="btn-fill w-full h-14 sm:h-12 font-satoshi text-label font-semibold tracking-wider uppercase bg-temple-text-primary text-temple-bg rounded-md disabled:opacity-50"
       >
-        FIRMA
+        <span>FIRMA</span>
       </button>
       <button
         onClick={onFail}

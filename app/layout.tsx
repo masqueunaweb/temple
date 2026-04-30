@@ -3,6 +3,8 @@ import { JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import LenisProvider from '@/components/providers/LenisProvider';
+import { Cursor } from '@/components/ui/Cursor';
+import { PageTransition } from '@/components/layout/PageTransition';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -46,13 +48,16 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className={jetbrainsMono.variable}>
+        <Cursor />
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </ThemeProvider>
       </body>
     </html>

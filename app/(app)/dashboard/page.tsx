@@ -115,6 +115,15 @@ export default function DashboardPage() {
       type: 'firma',
     });
 
+    // Flash del número del día en acento
+    if (dayNumberRef.current) {
+      dayNumberRef.current.style.color = 'var(--temple-accent)';
+      dayNumberRef.current.style.transition = 'color 0.3s';
+      setTimeout(() => {
+        dayNumberRef.current!.style.color = 'var(--temple-text-primary)';
+      }, 650);
+    }
+
     // Reload data
     loadData();
   };

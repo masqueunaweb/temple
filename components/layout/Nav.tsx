@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { ScrambleText } from '@/components/ui/ScrambleText';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +34,7 @@ export default function Nav() {
             href="/dashboard"
             className="font-satoshi text-display font-bold tracking-tight"
           >
-            TEMPLE
+            <ScrambleText text="TEMPLE" />
           </Link>
           <div className="flex items-center gap-6">
             <div className="hidden sm:flex gap-6">
